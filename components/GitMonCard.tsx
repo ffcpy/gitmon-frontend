@@ -76,7 +76,7 @@ export default function GitMonCard({
 
   const effect = RARITY_EFFECTS[card.rarity] ?? RARITY_EFFECTS.Common;
   const layout = LAYOUT_VARIANTS[card.template_id % LAYOUT_VARIANTS.length];
-  const backgroundUrl = getCardBackground(card.rarity, card.template_id);
+  const backgroundUrl = getCardBackground(card.rarity, card.template_id, card.username);
 
   return (
     <div style={{ perspective: 1200 }}>
@@ -98,10 +98,8 @@ export default function GitMonCard({
         <CardTexture type={effect.textureType} />
         <RarityFrame rarity={card.rarity} />
 
-        {/* Scrim de legibilidade sobre a arte de fundo */}
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/15 via-black/35 to-black/55" />
 
-        {/* Glare que segue o mouse */}
         <motion.div
           className="pointer-events-none absolute inset-0 z-10"
           style={{
@@ -112,7 +110,6 @@ export default function GitMonCard({
         />
 
         <div className="relative z-20">
-          {/* Cabeçalho: raridade, nome, divisor, level */}
           <div
             className={`mb-1 ${
               layout.headerAlign === "center"
@@ -150,12 +147,10 @@ export default function GitMonCard({
             )}
           </div>
 
-          {/* Badge de classe, sempre centralizado */}
           <div className="mb-3 flex justify-center">
             <ClassBadge cardClass={card.card_class} />
           </div>
 
-          {/* Avatar */}
           <div className="mb-4">
             <CardAvatar
               shape={layout.avatarShape}
@@ -172,7 +167,6 @@ export default function GitMonCard({
             )}
           </div>
 
-          {/* Painel de stats */}
           <div className="bg-black/40 backdrop-blur-md rounded-xl p-3 border border-white/10 space-y-1.5 mb-3">
             <StatDisplay label="ATK" value={card.attack} style={layout.statStyle} textClass={effect.frameClass} />
             <StatDisplay label="DEF" value={card.defense} style={layout.statStyle} textClass={effect.frameClass} />
@@ -183,7 +177,6 @@ export default function GitMonCard({
             <StatDisplay label="LUCK" value={card.luck} style={layout.statStyle} textClass={effect.frameClass} />
           </div>
 
-          {/* Linguagens */}
           <div className="flex flex-wrap gap-1 mb-3">
             {card.top_languages.map((lang) => (
               <span
@@ -195,7 +188,6 @@ export default function GitMonCard({
             ))}
           </div>
 
-          {/* Rodapé TCG: CR, W/L, streak, serial, estrelas */}
           <CardFooter
             username={card.username}
             rarity={card.rarity}
