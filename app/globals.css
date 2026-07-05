@@ -10,6 +10,16 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-gitmon-bg: #0a0a0f;
+  --font-gamified: var(--font-pixel-display), "Press Start 2P", monospace;
+  --font-terminal: var(--font-pixel-body), monospace;
+  --font-title: var(--font-title);
+  --color-ink: #1a1206;
+  --color-panel: rgba(15, 18, 28, 0.55);
+  --color-panel-border: rgba(245, 201, 138, 0.35);
+  --color-accent: #e8842c;
+  --color-accent-light: #f5c98a;
+  
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,4 +33,210 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+
+:root {
+  --font-gamified: var(--font-gamified);
+}
+
+.font-gamified {
+  font-family: var(--font-gamified);
+}
+
+body {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(139, 92, 246, 0.15), transparent 40%),
+    radial-gradient(circle at 80% 0%, rgba(56, 189, 248, 0.12), transparent 40%),
+    linear-gradient(180deg, #0a0a0f 0%, #14141f 100%);
+  min-height: 100vh;
+  background-attachment: fixed;
+}
+
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.gitmon-holo-border {
+  border: 2px solid transparent;
+  background-image:
+    linear-gradient(#18181b, #18181b),
+    linear-gradient(120deg, #f472b6, #facc15, #38bdf8, #a78bfa, #f472b6);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  background-size: 100% 100%, 300% 300%;
+  animation: holo-shift 4s linear infinite;
+}
+
+.gitmon-legendary-border {
+  border: 2px solid transparent;
+  background-image:
+    linear-gradient(#1c1206, #1c1206),
+    linear-gradient(120deg, #fbbf24, #f59e0b, #fde68a, #f59e0b, #fbbf24);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  background-size: 100% 100%, 300% 300%;
+  animation: legendary-shimmer 3s linear infinite;
+}
+
+@keyframes legendary-shimmer {
+  0% { background-position: 0% 0%, 0% 50%; }
+  100% { background-position: 0% 0%, 300% 50%; }
+}
+
+
+
+@keyframes holo-shift {
+  0% { background-position: 0% 0%, 0% 50%; }
+  100% { background-position: 0% 0%, 300% 50%; }
+}
+
+
+/* ===== COMMON: papel envelhecido ===== */
+.common-vignette {
+  box-shadow: inset 0 0 60px rgba(101, 67, 33, 0.35);
+}
+
+/* ===== RARE: neon pulsante ===== */
+@keyframes neon-pulse {
+  0%, 100% { filter: drop-shadow(0 0 6px rgba(244, 114, 182, 0.8)); }
+  50% { filter: drop-shadow(0 0 14px rgba(244, 114, 182, 1)); }
+}
+.neon-pulse { animation: neon-pulse 2.2s ease-in-out infinite; }
+
+/* ===== EPIC: vidro facetado ===== */
+.epic-glass {
+  background-image:
+    linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 40%),
+    linear-gradient(315deg, rgba(56,189,248,0.1) 0%, transparent 50%);
+}
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(500%); }
+}
+.epic-scanline {
+  position: absolute;
+  left: 0; right: 0;
+  height: 60px;
+  background: linear-gradient(180deg, transparent, rgba(56,189,248,0.12), transparent);
+  animation: scanline 4s linear infinite;
+  pointer-events: none;
+}
+
+/* ===== LEGENDARY: metal escovado + shimmer ===== */
+.legendary-metal {
+  background-image:
+    repeating-linear-gradient(90deg,
+      rgba(251,191,36,0.06) 0px, rgba(251,191,36,0.02) 1px,
+      transparent 1px, transparent 3px);
+}
+@keyframes gold-sweep {
+  0% { transform: translateX(-150%) skewX(-20deg); }
+  60%, 100% { transform: translateX(400%) skewX(-20deg); }
+}
+.legendary-sweep {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, rgba(253,230,138,0.18), transparent);
+  animation: gold-sweep 3.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ===== MYTHIC: aurora cósmica ===== */
+@keyframes aurora-drift {
+  0% { transform: rotate(0deg) scale(1.6); }
+  100% { transform: rotate(360deg) scale(1.6); }
+}
+.mythic-aurora {
+  position: absolute;
+  inset: -40%;
+  background:
+    conic-gradient(from 0deg,
+      rgba(217,70,239,0.25), rgba(56,189,248,0.2),
+      rgba(250,204,21,0.15), rgba(139,92,246,0.25),
+      rgba(217,70,239,0.25));
+  animation: aurora-drift 14s linear infinite;
+  filter: blur(30px);
+  pointer-events: none;
+}
+
+/* Glow do username por raridade */
+.name-glow-common { text-shadow: 0 0 8px rgba(251, 191, 36, 0.4), 0 2px 4px rgba(0, 0, 0, 0.7); }
+.name-glow-rare { text-shadow: 0 0 12px rgba(244, 114, 182, 0.7), 0 2px 4px rgba(0, 0, 0, 0.6); }
+.name-glow-epic { text-shadow: 0 0 12px rgba(56, 189, 248, 0.7), 0 2px 4px rgba(0, 0, 0, 0.6); }
+.name-glow-legendary { text-shadow: 0 0 14px rgba(251, 191, 36, 0.8), 0 2px 4px rgba(0, 0, 0, 0.7); }
+.name-glow-mythic { text-shadow: 0 0 16px rgba(217, 70, 239, 0.9), 0 0 30px rgba(139, 92, 246, 0.5), 0 2px 4px rgba(0, 0, 0, 0.7); }
+
+@keyframes streak-hot {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 3px rgba(251, 146, 60, 0.6)); }
+  50% { transform: scale(1.25); filter: drop-shadow(0 0 8px rgba(251, 146, 60, 1)); }
+}
+.streak-hot {
+  display: inline-block;
+  animation: streak-hot 1.2s ease-in-out infinite;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+}
+
+/* globals.css — adicionar ao final */
+
+.pixel-btn {
+  position: relative;
+  font-family: var(--font-pixel-body), monospace;
+  font-size: 1.35rem;
+  letter-spacing: 0.02em;
+  border: 2px solid rgba(0, 0, 0, 0.4);
+  clip-path: polygon(
+    0 8px, 8px 8px, 8px 0,
+    calc(100% - 8px) 0, calc(100% - 8px) 8px, 100% 8px,
+    100% calc(100% - 8px), calc(100% - 8px) calc(100% - 8px), calc(100% - 8px) 100%,
+    8px 100%, 8px calc(100% - 8px), 0 calc(100% - 8px)
+  );
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.55);
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+
+.pixel-btn:hover {
+  filter: brightness(1.08);
+}
+
+.pixel-btn:active {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.55);
+}
+
+.pixel-btn-primary {
+  background: #e8842c; /* âmbar chapado, sem gradiente */
+  color: #1a1206;
+}
+
+.pixel-btn-ghost {
+  background: rgba(15, 18, 28, 0.55);
+  color: #f5c98a;
+  border-color: rgba(245, 201, 138, 0.35);
+}
+
+.pixel-btn-danger {
+  background: #c73e3e;
+  color: #fff5f0;
+  border-color: rgba(0, 0, 0, 0.4);
+}
+
+.pixel-btn-success {
+  background: #3ba776;
+  color: #eafff4;
+  border-color: rgba(0, 0, 0, 0.4);
+}
+
+.pixel-btn-muted {
+  background: rgba(71, 85, 105, 0.4);
+  color: #cbd5e1;
+  border-color: rgba(148, 163, 184, 0.3);
 }

@@ -1,0 +1,18 @@
+/* HeroBackground.module.css */
+.hero {
+  position: fixed; /* ou "absolute" se o container pai já for full-screen */
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: -1; /* fica atrás do conteúdo da página */
+}
+
+.bgGif {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* preenche sem distorcer, corta as bordas se precisar */
+  image-rendering: pixelated;
+}
