@@ -7,7 +7,7 @@ const MAX_TEMPLATE_ID: Record<string, number> = {
 };
 
 const CREATOR_USERNAME = "ffcpy";
-const CREATOR_BACKGROUND = "/card-backgrounds/creator-special.png";
+const CREATOR_BACKGROUND = "/card-backgrounds/common-6.png";
 
 export function getCardBackground(
   rarity: string,
