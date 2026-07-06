@@ -6,6 +6,7 @@ import { getMyProfile, challengeBattle } from "@/lib/api";
 import type { GitMonCard as GitMonCardType, BattleResult } from "@/types/card";
 import PixelButton from "@/components/ui/PixelButton";
 import GitMonCard from "@/components/GitMonCard";
+import { PAUSE_MUSIC_EVENT, RESUME_MUSIC_EVENT } from "@/components/BackgroundMusic";
 
 const ATTRIBUTE_LABELS: Record<string, string> = {
   attack: "ATK",
@@ -19,7 +20,6 @@ const ATTRIBUTE_LABELS: Record<string, string> = {
 
 type Stage = "loading" | "intro" | number | "result" | "error";
 
-/** Escolhe uma escala de acordo com a largura da viewport. */
 function useResponsiveScale() {
   const [scale, setScale] = useState(0.42);
 
@@ -39,11 +39,6 @@ function useResponsiveScale() {
   return scale;
 }
 
-/**
- * Envolve o GitMonCard (largura fixa w-80) e o exibe reduzido,
- * medindo a altura real renderizada para reservar o espaço certo
- * no layout — sem precisar hardcodar a altura do card.
- */
 function ScaledCard({
   scale,
   highlight,
@@ -104,6 +99,13 @@ export default function BattleScreen({
   const [result, setResult] = useState<BattleResult | null>(null);
   const [errorMsg, setErrorMsg] = useState("");
   const scale = useResponsiveScale();
+
+  useEffect(() => {
+    window.dispatchEvent(new Event(PAUSE_MUSIC_EVENT));
+    return () => {
+      window.dispatchEvent(new Event(RESUME_MUSIC_EVENT));
+    };
+  }, []);
 
   useEffect(() => {
     async function run() {
@@ -167,16 +169,14 @@ export default function BattleScreen({
       </div>
 
       {stage === "loading" && (
-        <p className="relative z-10 font-terminal text-lg sm:text-xl text-amber-200 animate-pulse tracking-wide text-center px-4">
+        <p className="relative z-10 font-terminal text-xl text-amber-200 animate-pulse tracking-wide text-center px-4">
           Buscando oponente...
         </p>
       )}
 
       {stage === "error" && (
         <div className="relative z-10 flex flex-col items-center gap-4 text-center px-4">
-          <p className="font-terminal text-base sm:text-lg text-slate-200 max-w-md">
-            {errorMsg}
-          </p>
+          <p className="font-terminal text-lg text-slate-200 max-w-md">{errorMsg}</p>
           <PixelButton onClick={onClose}>Voltar</PixelButton>
         </div>
       )}
@@ -184,7 +184,6 @@ export default function BattleScreen({
       {(stage === "intro" || typeof stage === "number" || stage === "result") &&
         challenger && (
           <div className="relative z-10 flex flex-col items-center gap-5 sm:gap-8 w-full max-w-4xl">
-            {/* Cards lado a lado com placar */}
             <div className="flex items-start justify-center w-full gap-2 sm:gap-6">
               <Fighter
                 card={challenger}
@@ -259,7 +258,7 @@ export default function BattleScreen({
                   {challengerWon ? "Vitória!" : "Derrota"}
                 </motion.p>
 
-                <p className="font-terminal text-base sm:text-lg text-slate-300">
+                <p className="font-terminal text-lg text-slate-300">
                   CR {challenger.code_rank} →{" "}
                   <span className={challengerWon ? "text-emerald-400" : "text-red-400"}>
                     {result.challenger_cr_after}
@@ -335,7 +334,7 @@ function RoundCard({
       <p className="font-terminal text-xs text-slate-400 relative z-10">
         Round {index + 1} / {total}
       </p>
-      <p className="font-terminal text-xl sm:text-2xl text-amber-200 tracking-widest relative z-10">
+      <p className="font-terminal text-2xl text-amber-200 tracking-widest relative z-10">
         {ATTRIBUTE_LABELS[round.attribute] ?? round.attribute.toUpperCase()}
       </p>
 
@@ -348,7 +347,7 @@ function RoundCard({
             scale: challengerWins ? [1, 1.25, 1] : 1,
           }}
           transition={{ delay: 0.15, duration: 0.4 }}
-          className={`font-terminal text-2xl sm:text-3xl ${
+          className={`font-terminal text-3xl ${
             challengerWins ? "text-emerald-400" : "text-slate-500"
           }`}
         >
@@ -359,7 +358,7 @@ function RoundCard({
           initial={{ scale: 0 }}
           animate={{ scale: 1, rotate: [0, -8, 8, 0] }}
           transition={{ delay: 0.3, duration: 0.4 }}
-          className="font-terminal text-amber-300 text-base sm:text-lg shrink-0"
+          className="font-terminal text-amber-300 text-lg"
         >
           ⚔️
         </motion.span>
@@ -372,7 +371,7 @@ function RoundCard({
             scale: !challengerWins ? [1, 1.25, 1] : 1,
           }}
           transition={{ delay: 0.15, duration: 0.4 }}
-          className={`font-terminal text-2xl sm:text-3xl ${
+          className={`font-terminal text-3xl ${
             !challengerWins ? "text-emerald-400" : "text-slate-500"
           }`}
         >
@@ -384,7 +383,7 @@ function RoundCard({
         initial={{ scaleX: 0 }}
         animate={{ scaleX: 1 }}
         transition={{ delay: 0.5, duration: 0.5 }}
-        className={`h-1 w-20 sm:w-24 rounded-full origin-center ${
+        className={`h-1 w-24 rounded-full origin-center ${
           challengerWins ? "bg-emerald-400" : "bg-red-400"
         }`}
         style={{ marginLeft: challengerWins ? "auto" : 0, marginRight: challengerWins ? "0" : "auto" }}

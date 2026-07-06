@@ -4,11 +4,14 @@ import { useEffect, useRef, useState } from "react";
 
 const STORAGE_KEY = "gitmon_music_enabled";
 export const PLAY_MUSIC_EVENT = "gitmon:play-music";
+export const PAUSE_MUSIC_EVENT = "gitmon:pause-music";
+export const RESUME_MUSIC_EVENT = "gitmon:resume-music";
 
 export default function BackgroundMusic() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [enabled, setEnabled] = useState(true);
   const [ready, setReady] = useState(false);
+  const [suppressed, setSuppressed] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
@@ -17,10 +20,25 @@ export default function BackgroundMusic() {
   }, []);
 
   useEffect(() => {
+    function suppress() {
+      setSuppressed(true);
+    }
+    function unsuppress() {
+      setSuppressed(false);
+    }
+    window.addEventListener(PAUSE_MUSIC_EVENT, suppress);
+    window.addEventListener(RESUME_MUSIC_EVENT, unsuppress);
+    return () => {
+      window.removeEventListener(PAUSE_MUSIC_EVENT, suppress);
+      window.removeEventListener(RESUME_MUSIC_EVENT, unsuppress);
+    };
+  }, []);
+
+  useEffect(() => {
     if (!ready || !audioRef.current) return;
     audioRef.current.volume = 0.35;
 
-    if (!enabled) {
+    if (!enabled || suppressed) {
       audioRef.current.pause();
       return;
     }
@@ -40,7 +58,7 @@ export default function BackgroundMusic() {
       window.removeEventListener("pointerdown", attemptPlay);
       window.removeEventListener("keydown", attemptPlay);
     };
-  }, [enabled, ready]);
+  }, [enabled, ready, suppressed]);
 
   function toggle() {
     const next = !enabled;
