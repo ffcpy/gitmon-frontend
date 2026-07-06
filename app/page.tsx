@@ -1,17 +1,24 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import SearchBar from "@/components/SearchBar";
 import { getGitHubLoginUrl } from "@/lib/api";
 import { isLoggedIn } from "@/lib/auth";
 import HeroBackground from "@/components/HeroBackground";
 import HeroContent from "@/components/HeroContent";
 import PixelButton from "@/components/ui/PixelButton";
+import IntroScroll from "@/components/IntroScroll";
 
 export default function HomePage() {
-  const loggedIn = isLoggedIn();
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    setLoggedIn(isLoggedIn());
+  }, []);
 
   return (
     <main className="relative min-h-screen flex flex-col items-center justify-center gap-8 px-4">
+      <IntroScroll />
       <HeroBackground />
 
       <div className="relative z-10 flex flex-col items-center gap-8 w-full">

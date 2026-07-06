@@ -38,9 +38,9 @@ export default async function RankingPage() {
               <Link
                 key={entry.username}
                 href={`/card/${entry.username}`}
-                className={`flex items-center gap-3 sm:gap-4 px-3 sm:px-5 py-3 border-b border-slate-400/10 last:border-0 hover:bg-white/5 transition ${
-                  isTop3 ? "bg-orange-400/5" : ""
-                }`}
+                className={`flex items-center gap-3 sm:gap-4 px-3 sm:px-5 py-3 border-b border-slate-400/10 last:border-0 hover:bg-white/5 hover:scale-[1.015] hover:shadow-lg hover:shadow-black/30 hover:z-10 relative transition-all duration-150 ${
+  isTop3 ? "bg-orange-400/5" : ""
+}`}
               >
                 <span className="w-8 sm:w-10 text-center font-terminal text-base sm:text-lg text-amber-200 shrink-0">
                   {MEDAL[entry.position] ?? entry.position}

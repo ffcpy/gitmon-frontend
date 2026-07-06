@@ -1,6 +1,7 @@
 import "./globals.css";
-import { Pixelify_Sans, VT323 } from "next/font/google";
-import { Titan_One } from "next/font/google";
+import { Pixelify_Sans, VT323, Titan_One } from "next/font/google";
+import PageTransition from "@/components/PageTransition";
+import BackgroundMusic from "@/components/BackgroundMusic";
 
 const pixelifySans = Pixelify_Sans({
   subsets: ["latin"],
@@ -20,7 +21,6 @@ const titanOne = Titan_One({
   variable: "--font-title",
 });
 
-
 export const metadata = {
   title: "GitMon",
   description: "Transforme seu perfil GitHub em uma carta colecionável",
@@ -28,8 +28,14 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR" className={`${pixelifySans.variable} ${vt323.variable} ${titanOne.variable}`}>
-      <body>{children}</body>
+    <html
+      lang="pt-BR"
+      className={`${pixelifySans.variable} ${vt323.variable} ${titanOne.variable}`}
+    >
+      <body>
+        <BackgroundMusic />
+        <PageTransition>{children}</PageTransition>
+      </body>
     </html>
   );
 }

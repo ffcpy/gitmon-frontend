@@ -1,50 +1,40 @@
 "use client";
 
-import { useState } from "react";
-import BoosterReveal from "@/components/BoosterReveal";
-import type { GitMonCard as GitMonCardType } from "@/types/card";
+import SearchBar from "@/components/SearchBar";
+import { getGitHubLoginUrl } from "@/lib/api";
+import { isLoggedIn } from "@/lib/auth";
+import HeroBackground from "@/components/HeroBackground";
+import HeroContent from "@/components/HeroContent";
+import PixelButton from "@/components/ui/PixelButton";
+import IntroScroll from "@/components/IntroScroll";
 
-const MOCK_AVATAR = "https://avatars.githubusercontent.com/u/1?v=4";
-
-const mockCard: GitMonCardType = {
-  username: "ffcpy",
-  avatar_url: MOCK_AVATAR,
-  card_class: "Full Stack Knight",
-  rarity: "Mythic", // troque para testar cada raridade
-  power_score: 254,
-  level: 12,
-  code_rank: 1016,
-  wins: 8,
-  losses: 3,
-  win_streak: 4,
-  attack: 65,
-  defense: 54,
-  magic: 48,
-  speed: 70,
-  intelligence: 40,
-  hp: 60,
-  luck: 55,
-  top_languages: ["Python", "TypeScript", "Docker"],
-  battles_enabled: true,
-  template_id: 1,
-  total_seasons: 3,
-  seasons_won: 1,
-  highest_code_rank: 1240,
-  highest_win_streak: 7,
-  total_battles: 42,
-};
-
-export default function RevealPage() {
-  const [key, setKey] = useState(0);
+export default function HomePage() {
+  const loggedIn = isLoggedIn();
 
   return (
-    <main className="min-h-screen bg-grid">
-      <BoosterReveal
-        key={key}
-        card={mockCard}
-        avatarUrl={MOCK_AVATAR}
-        onFinish={() => setKey((k) => k + 1)} // replay para dev
-      />
+    <main className="relative min-h-screen flex flex-col items-center justify-center gap-8 px-4">
+      <IntroScroll />
+      <HeroBackground />
+
+      <div className="relative z-10 flex flex-col items-center gap-8 w-full">
+        <HeroContent />
+
+        <SearchBar />
+
+        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
+          {loggedIn ? (
+            <PixelButton href="/me">Meu card</PixelButton>
+          ) : (
+            <PixelButton href={getGitHubLoginUrl()} external>
+              Criar meu card
+            </PixelButton>
+          )}
+
+          <PixelButton variant="ghost" href="/ranking">
+            Ver ranking
+          </PixelButton>
+        </div>
+      </div>
     </main>
   );
 }

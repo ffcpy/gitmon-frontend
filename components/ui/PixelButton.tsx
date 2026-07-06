@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ButtonHTMLAttributes, ReactNode } from "react";
+import { ButtonHTMLAttributes, MouseEvent, ReactNode, useState } from "react";
 
 type Variant = "primary" | "ghost" | "danger" | "success" | "muted";
 
@@ -27,30 +27,52 @@ type LinkProps = BaseProps & {
   external?: boolean;
 };
 
+function useClickPulse() {
+  const [clicked, setClicked] = useState(false);
+
+  function trigger() {
+    setClicked(false);
+    requestAnimationFrame(() => setClicked(true));
+    window.setTimeout(() => setClicked(false), 280);
+  }
+
+  return { clicked, trigger };
+}
+
 export default function PixelButton(props: ButtonProps | LinkProps) {
   const { variant = "primary", children, className = "" } = props;
-  const classes = `pixel-btn ${VARIANT_CLASS[variant]} px-6 py-3 font-terminal font-bold ${className}`;
+  const { clicked, trigger } = useClickPulse();
+
+  const classes = `pixel-btn ${VARIANT_CLASS[variant]} px-6 py-3 font-terminal font-bold ${
+    clicked ? "pixel-btn-clicked" : ""
+  } ${className}`;
 
   if ("href" in props && props.href) {
+    const handleClick = () => trigger();
     if (props.external) {
       return (
-        <a href={props.href} className={classes}>
+        <a href={props.href} className={classes} onClick={handleClick}>
           {children}
         </a>
       );
     }
     return (
-      <Link href={props.href} className={classes}>
+      <Link href={props.href} className={classes} onClick={handleClick}>
         {children}
       </Link>
     );
   }
 
-  const { variant: _v, href: _h, external: _e, className: _c, ...rest } =
+  const { variant: _v, href: _h, external: _e, className: _c, onClick, ...rest } =
     props as ButtonProps & { href?: string; external?: boolean };
 
+  function handleButtonClick(e: MouseEvent<HTMLButtonElement>) {
+    trigger();
+    onClick?.(e);
+  }
+
   return (
-    <button className={classes} {...rest}>
+    <button className={classes} onClick={handleButtonClick} {...rest}>
       {children}
     </button>
   );
